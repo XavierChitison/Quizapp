@@ -63,8 +63,34 @@ body {
 .quiz-info {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   color: #666;
   margin-bottom: 10px;
+}
+
+.timer-container {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #e86a33;
+}
+
+.timer-label {
+  margin-right: 5px;
+}
+
+#timer {
+  font-size: 1.3rem;
+  min-width: 30px;
+}
+
+#timer.warning {
+  color: #ffc107;
+}
+
+#timer.danger {
+  color: #dc3545;
 }
 
 .answers-container {

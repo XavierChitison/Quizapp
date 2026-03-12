@@ -13,6 +13,7 @@ const maxScoreSpan = document.getElementById("max-score");
 const resultMessage = document.getElementById("result-message");
 const restartButton = document.getElementById("restart-btn");
 const progressBar = document.getElementById("progress");
+const timerElement = document.getElementById("timer");
 
 const quizQuestions = [
   {
@@ -66,6 +67,8 @@ const quizQuestions = [
 let currentQuestionIndex = 0;
 let score = 0;
 let answersDisabled = false;
+let timeLeft = 10;
+let timerInterval = null;
 
 totalQuestionsSpan.textContent = quizQuestions.length;
 maxScoreSpan.textContent = quizQuestions.length;
@@ -113,6 +116,9 @@ function showQuestion() {
 
     answersContainer.appendChild(button);
   });
+
+  // Start the timer for this question
+  startTimer();
 }
 
 function selectAnswer(event) {
@@ -120,6 +126,9 @@ function selectAnswer(event) {
   if (answersDisabled) return;
 
   answersDisabled = true;
+  
+  // Clear the timer when user selects an answer
+  clearTimer();
 
   const selectedButton = event.target;
   const isCorrect = selectedButton.dataset.correct === "true";
@@ -151,6 +160,7 @@ function selectAnswer(event) {
 }
 
 function showResults() {
+  clearTimer();
   quizScreen.classList.remove("active");
   resultScreen.classList.add("active");
 
@@ -175,4 +185,59 @@ function restartQuiz() {
   resultScreen.classList.remove("active");
 
   startQuiz();
+}
+
+// TIMER FUNCTIONS
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = 10;
+  timerElement.textContent = timeLeft;
+  timerElement.classList.remove("warning", "danger");
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    timerElement.textContent = timeLeft;
+
+    // Add warning color when time is low
+    if (timeLeft <= 3) {
+      timerElement.classList.add("danger");
+      timerElement.classList.remove("warning");
+    } else if (timeLeft <= 5) {
+      timerElement.classList.add("warning");
+    }
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      handleTimeout();
+    }
+  }, 1000);
+}
+
+function handleTimeout() {
+  if (answersDisabled) return;
+  
+  answersDisabled = true;
+
+  // Show correct answer and mark all as incorrect
+  Array.from(answersContainer.children).forEach((button) => {
+    if (button.dataset.correct === "true") {
+      button.classList.add("correct");
+    }
+    button.classList.add("incorrect");
+  });
+
+  // Move to next question after showing the correct answer
+  setTimeout(() => {
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < quizQuestions.length) {
+      showQuestion();
+    } else {
+      showResults();
+    }
+  }, 1500);
+}
+
+function clearTimer() {
+  clearInterval(timerInterval);
 }
