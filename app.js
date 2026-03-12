@@ -171,7 +171,7 @@ function showResults() {
   if (percentage === 100) {
     resultMessage.textContent = "Perfect! You Know Your JavaScript!";
   } else if (percentage >= 80) {
-    resultMessage.textContent = "Great job! You A Good JavaScript Pro!";
+    resultMessage.textContent = "Great job! Your A JavaScript Pro!";
   } else if (percentage >= 60) {
     resultMessage.textContent = "Good effort! Keep learning!";
   } else if (percentage >= 40) {
