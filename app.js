@@ -241,3 +241,4 @@ function handleTimeout() {
 function clearTimer() {
   clearInterval(timerInterval);
 }
+
